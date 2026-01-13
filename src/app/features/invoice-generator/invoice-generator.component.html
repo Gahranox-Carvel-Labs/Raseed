@@ -9,8 +9,8 @@
     </div>
 
     <div class="actions">
-      <a href="https://www.raseedpro.com" target="_blank" class="btn btn-pro">
-        Explore Raseed PRO &rarr;
+      <a href="/raseed-pro" class="btn btn-pro">
+        Login to Raseed PRO &rarr;
       </a>
     </div>
   </header>
@@ -61,6 +61,10 @@
             </div>
           </ng-template>
         </div>
+        <button type="button" class="btn-danger-outline sm" *ngIf="logoUrl()" (click)="removeLogo(fileInput)"
+          style="margin-top: 8px; width: 100%;">
+          Remove Logo
+        </button>
 
         <div class="form-group">
           <label>Business Name</label>

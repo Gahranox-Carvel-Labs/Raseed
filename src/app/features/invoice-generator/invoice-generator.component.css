@@ -267,6 +267,55 @@ h3 {
   padding: 0 0.5rem;
 }
 
+.btn-icon:hover {
+  color: #dc2626;
+}
+
+.btn-danger-outline {
+  background: transparent;
+  border: 1px solid #fee2e2;
+  color: #ef4444;
+  padding: 0.4rem 0.8rem;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-danger-outline:hover {
+  background: #fef2f2;
+  border-color: #ef4444;
+}
+
+/* Primary Button */
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
 /* ... previous styles ... */
 
 /* Pro Button */
@@ -304,9 +353,58 @@ h3 {
 }
 
 .totals-card {
-  width: 300px;
-  /* ... existing styles ... */
-  background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+  width: 350px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.75rem;
+  border-radius: var(--radius);
+  box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+}
+
+.row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  font-size: 1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.row-between:last-child {
+  border-bottom: none;
+}
+
+.row-between span:first-child {
+  font-weight: 500;
+  opacity: 0.95;
+}
+
+.row-between span:last-child {
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.grand-total {
+  margin-top: 0.5rem;
+  padding-top: 1rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.3) !important;
+  border-bottom: none !important;
+  font-size: 1.2rem !important;
+}
+
+.grand-total span {
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+}
+
+.divider {
+  height: 2px;
+  background: rgba(255, 255, 255, 0.3);
+  margin: 0.5rem 0;
+}
+
+.text-danger {
+  color: #fca5a5 !important;
 }
 
 .actions-footer {

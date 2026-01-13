@@ -1,9 +1,9 @@
 import { Component, signal } from '@angular/core';
-import { InvoiceGeneratorComponent } from './features/invoice-generator/invoice-generator.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',
-  imports: [InvoiceGeneratorComponent],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

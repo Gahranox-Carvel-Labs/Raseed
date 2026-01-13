@@ -78,17 +78,20 @@ export class InvoiceGeneratorComponent {
     }
 
     preloadAppLogo() {
-        const img = new Image();
-        img.src = 'raseedlogoCropped.png';
-        img.onload = () => {
-            const canvas = document.createElement('canvas');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            const ctx = canvas.getContext('2d')!;
-            ctx.drawImage(img, 0, 0);
-            this.appLogo.set(canvas.toDataURL('image/png'));
-        };
-        img.onerror = (err) => console.warn('Failed to load app logo', err);
+        // if (this.logoUrl() === null) {
+        //     this.logoUrl.set('raseedlogoCropped.png');
+        // }
+        // const img = new Image();
+        // img.src = 'raseedlogoCropped.png';
+        // img.onload = () => {
+        //     const canvas = document.createElement('canvas');
+        //     canvas.width = img.width;
+        //     canvas.height = img.height;
+        //     const ctx = canvas.getContext('2d')!;
+        //     ctx.drawImage(img, 0, 0);
+        //     this.appLogo.set(canvas.toDataURL('image/png'));
+        // };
+        // img.onerror = (err) => console.warn('Failed to load app logo', err);
     }
 
     get lineItems(): FormArray {
@@ -123,6 +126,11 @@ export class InvoiceGeneratorComponent {
                 this.logoUrl.set(resizedDataUrl);
             });
         }
+    }
+
+    removeLogo(input: HTMLInputElement) {
+        this.logoUrl.set(null);
+        input.value = ''; // Reset input to allow re-uploading same file
     }
 
     // Helper to resize image using Canvas
@@ -228,7 +236,13 @@ export class InvoiceGeneratorComponent {
         return result;
     }
 
-    generatePDF() {
+    async generatePDF() {
+        if (this.logoUrl() === null) {
+            const useDefaultLogo = confirm('Do you want to use the default watermark?');
+            if (useDefaultLogo) {
+                this.logoUrl.set('raseedlogoCropped.png');
+            }
+        }
         if (this.invoiceForm.valid && this.calculatedInvoice()) {
             this.validationErrors.set([]); // Clear errors
 
@@ -260,8 +274,14 @@ export class InvoiceGeneratorComponent {
 
             this.billingService.createInvoice(fullInvoice, fullInvoice.idempotencyKey);
 
-            // Trigger PDF download
-            generateInvoicePDF(fullInvoice, this.logoUrl(), this.appLogo());
+            // Trigger PDF download with error handling
+            try {
+                await generateInvoicePDF(fullInvoice, this.logoUrl(), this.appLogo());
+                console.log('PDF generated successfully!');
+            } catch (error) {
+                console.error('PDF Generation Error:', error);
+                this.validationErrors.set([`Failed to generate PDF: ${error instanceof Error ? error.message : 'Unknown error'}`]);
+            }
         } else {
             this.invoiceForm.markAllAsTouched();
             const errors = this.getFormValidationErrors(this.invoiceForm);

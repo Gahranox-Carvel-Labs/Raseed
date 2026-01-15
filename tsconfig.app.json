@@ -1,3 +1,9 @@
+/*
+  Author: Abdul Faheem A
+  Copyrights: Gahranox Carvel Labs Technologies
+  Purpose: Application-specific TypeScript configuration for the Bill0 client app.
+  Usecase: Defines the scope of source files to be compiled for the browser-based application production and development builds.
+*/
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {

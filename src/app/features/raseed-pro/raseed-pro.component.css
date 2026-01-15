@@ -1,4 +1,10 @@
-.raseed-pro-container {
+/*
+  Author: Abdul Faheem A
+  Copyrights: Gahranox Carvel Labs Technologies
+  Purpose: Application-wide styling for the Bill0 PRO promotion and feature preview page.
+  Usecase: High-engagement landing page design with premiums gradients and animations.
+*/
+.Bill0-pro-container {
   min-height: 100vh;
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   padding: 2rem;
@@ -99,6 +105,7 @@
     opacity: 0;
     transform: translateY(30px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -117,10 +124,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% {
+
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
+
   50% {
     opacity: 0.8;
     transform: scale(1.05);
@@ -198,7 +208,7 @@
   margin: 0 0 0.5rem 0;
 }
 
-.cta-section > p {
+.cta-section>p {
   text-align: center;
   color: #718096;
   margin-bottom: 1.5rem;
@@ -212,6 +222,7 @@
   from {
     opacity: 0;
   }
+
   to {
     opacity: 1;
   }
@@ -219,7 +230,7 @@
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .raseed-pro-container {
+  .Bill0-pro-container {
     padding: 1rem;
   }
 

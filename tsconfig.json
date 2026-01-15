@@ -1,3 +1,9 @@
+/*
+  Author: Abdul Faheem A
+  Copyrights: Gahranox Carvel Labs Technologies
+  Purpose: Global TypeScript configuration for the Bill0 workspace.
+  Usecase: Enforces strict type checking and defines compilation benchmarks for the entire project.
+*/
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {

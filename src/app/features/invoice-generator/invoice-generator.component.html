@@ -1,16 +1,40 @@
+<!--
+  Author: Abdul Faheem A
+  Copyrights: Gahranox Carvel Labs Technologies
+  Purpose: User interface for the professional invoice generator, providing forms for billing data and itemized lists.
+  Usecase: Allows users to interactively build invoices, upload logos, and trigger financial calculations and PDF exports.
+-->
 <div class="container fade-in">
+  <!-- Welcome Notification -->
+  <div class="welcome-notification" *ngIf="showWelcome()">
+    <div class="welcome-content">
+      <div class="welcome-icon">✨</div>
+      <div class="welcome-text">
+        <h2>Welcome to Bill0</h2>
+        <p>
+          Experience the professional Bill0 Free Version—your ultimate tool for effortless invoice generation.
+          Easily create high-quality invoices, personalize them with your <strong>business logo</strong>, and
+          instantly download them as <strong>professional PDFs</strong>. Enjoy robust features including
+          real-time financial calculations, flexible tax management (Inclusive/Exclusive), custom discounts,
+          and support for multiple international currencies.
+        </p>
+      </div>
+      <button class="btn-close" (click)="dismissWelcome()" aria-label="Dismiss">&times;</button>
+    </div>
+  </div>
+
   <header class="app-header">
     <div class="brand">
-      <img src="raseedlogoCropped.png" alt="Raseed Logo" class="app-logo">
+      <img src="Bill0logoCropped.png" alt="Bill0 Logo" class="app-logo">
       <div>
-        <h1>Raseed <span class="accent">Free version</span></h1>
+        <h1>Bill0 <span class="accent">Free version</span></h1>
         <p>Professional Invoice Builder</p>
       </div>
     </div>
 
     <div class="actions">
-      <a href="/raseed-pro" class="btn btn-pro">
-        Login to Raseed PRO &rarr;
+      <a href="/Bill0-pro" class="btn btn-pro">
+        Login to Bill0 PRO &rarr;
       </a>
     </div>
   </header>

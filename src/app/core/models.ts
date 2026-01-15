@@ -1,3 +1,9 @@
+/**
+ * Author: Abdul Faheem A
+ * Copyrights: Gahranox Carvel Labs Technologies
+ * Purpose: Central repository for all interfaces, enums, and types used across the Bill0 billing platform.
+ * Usecase: Ensures type safety and consistent data structures for invoices, accounts, and financial calculations.
+ */
 
 // Enums
 export enum CurrencyCode {
@@ -5,7 +11,7 @@ export enum CurrencyCode {
     EUR = 'EUR',
     INR = 'INR',
     GBP = 'GBP',
-    AED = 'AED', // Added for potential regional context given "Raseed" name
+    AED = 'AED', // Added for potential regional context given "Bill0" name
     SAR = 'SAR'
 }
 

@@ -1,3 +1,10 @@
+/**
+ * Author: Abdul Faheem A
+ * Copyrights: Gahranox Carvel Labs Technologies
+ * Purpose: Main controller for the invoice generation interface, handling form state, image processing, and PDF triggering.
+ * Usecase: Users interact with this component to input billing details, add line items, and export professional invoices.
+ */
+
 import { Component, computed, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormArray, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -21,6 +28,7 @@ export class InvoiceGeneratorComponent {
 
     invoiceForm: FormGroup;
     logoUrl = signal<string | null>(null);
+    showWelcome = signal<boolean>(true);
 
     // Options for Dropdowns
     currencies = Object.values(CurrencyCode);
@@ -32,7 +40,6 @@ export class InvoiceGeneratorComponent {
 
     constructor() {
         this.invoiceForm = this.fb.group({
-            // ... existing form config ...
             invoiceType: [InvoiceType.Simplified, Validators.required],
             currency: [CurrencyCode.USD, Validators.required],
             issueDate: [new Date().toISOString().split('T')[0], Validators.required],
@@ -77,35 +84,31 @@ export class InvoiceGeneratorComponent {
         });
     }
 
-    preloadAppLogo() {
-        // if (this.logoUrl() === null) {
-        //     this.logoUrl.set('raseedlogoCropped.png');
-        // }
-        // const img = new Image();
-        // img.src = 'raseedlogoCropped.png';
-        // img.onload = () => {
-        //     const canvas = document.createElement('canvas');
-        //     canvas.width = img.width;
-        //     canvas.height = img.height;
-        //     const ctx = canvas.getContext('2d')!;
-        //     ctx.drawImage(img, 0, 0);
-        //     this.appLogo.set(canvas.toDataURL('image/png'));
-        // };
-        // img.onerror = (err) => console.warn('Failed to load app logo', err);
+    /**
+     * Initializes the application logo as a preview. Currently commented out but reserved for future branding.
+     * @returns void
+     */
+    preloadAppLogo(): void {
+        // Reserved for future implementation
     }
 
+    /**
+     * Getter to access the lineItems FormArray from the main invoice form.
+     * @returns FormArray - The array of form groups representing invoice items.
+     */
     get lineItems(): FormArray {
         return this.invoiceForm.get('lineItems') as FormArray;
     }
 
-    addLineItem() {
+    /**
+     * Adds a new empty line item group to the invoice form with default validators.
+     * @returns void
+     */
+    addLineItem(): void {
         const itemGroup = this.fb.group({
             description: ['', Validators.required],
             quantity: [1, [Validators.required, Validators.min(1)]],
             unitPrice: [0, [Validators.required, Validators.min(0)]],
-            // Note: We input Unit Price as standard number (e.g. 10.50) but model expects integer (1050)
-            // We need to handle this conversion. For form simplicity, we bind to decimal inputs.
-
             taxRate: [0, [Validators.required, Validators.min(0)]],
             taxType: [TaxType.Exclusive, Validators.required],
             discount: [0, [Validators.min(0)]]
@@ -113,13 +116,31 @@ export class InvoiceGeneratorComponent {
         this.lineItems.push(itemGroup);
     }
 
-    removeLineItem(index: number) {
+    /**
+     * Removes a line item from the form at the specified index.
+     * @param index number - The position of the item in the array.
+     * @returns void
+     */
+    removeLineItem(index: number): void {
         this.lineItems.removeAt(index);
     }
 
     validationErrors = signal<string[]>([]);
 
-    onLogoSelected(event: any) {
+    /**
+     * Dismisses the welcome notification.
+     * @returns void
+     */
+    dismissWelcome(): void {
+        this.showWelcome.set(false);
+    }
+
+    /**
+     * Triggered when a user selects a business logo file. Processes and resizes the image.
+     * @param event any - The file input change event.
+     * @returns void
+     */
+    onLogoSelected(event: any): void {
         const file = event.target.files[0];
         if (file) {
             this.resizeImage(file, 300, 300).then(resizedDataUrl => {
@@ -128,12 +149,23 @@ export class InvoiceGeneratorComponent {
         }
     }
 
-    removeLogo(input: HTMLInputElement) {
+    /**
+     * Clears the selected logo and resets the file input to allow re-selection.
+     * @param input HTMLInputElement - The file input element reference.
+     * @returns void
+     */
+    removeLogo(input: HTMLInputElement): void {
         this.logoUrl.set(null);
-        input.value = ''; // Reset input to allow re-uploading same file
+        input.value = '';
     }
 
-    // Helper to resize image using Canvas
+    /**
+     * Helper to resize an image using a hidden Canvas element to save bandwidth and memory.
+     * @param file File - The raw image file.
+     * @param maxWidth number - Maximum allowed width.
+     * @param maxHeight number - Maximum allowed height.
+     * @returns Promise<string> - A promise resolving to the base64 encoded resized image string.
+     */
     resizeImage(file: File, maxWidth: number, maxHeight: number): Promise<string> {
         return new Promise((resolve) => {
             const reader = new FileReader();
@@ -168,21 +200,21 @@ export class InvoiceGeneratorComponent {
         });
     }
 
-    recalculate(formValue: any) {
+    /**
+     * Maps the form value to the financial model and triggers recalculation.
+     * @param formValue any - The raw form value from [invoiceForm].
+     * @returns void
+     */
+    recalculate(formValue: any): void {
         if (!formValue) return;
-        // resetting errors on change might be too aggressive if user is typing
-        // this.validationErrors.set([]);
 
-        // Map Form Data to Model (and convert decimals to integers)
         const currency = formValue.currency as CurrencyCode;
-
-        // Helper to convert decimal input to cents
         const toCents = (val: number) => Math.round((val || 0) * 100);
 
         const items: LineItem[] = formValue.lineItems.map((item: any) => {
             return {
                 id: uuidv4(),
-                productId: 'temp-id', // We don't have product selection yet, just free text
+                productId: 'temp-id',
                 description: item.description,
                 quantity: item.quantity,
                 unitPrice: { amount: toCents(item.unitPrice), currency },
@@ -191,7 +223,6 @@ export class InvoiceGeneratorComponent {
             } as LineItem;
         });
 
-        // Create partial Invoice for calculation
         const partialInvoice: Partial<Invoice> = {
             issueDate: formValue.issueDate,
             dueDate: formValue.dueDate,
@@ -200,11 +231,15 @@ export class InvoiceGeneratorComponent {
             lineItems: items
         };
 
-        // Calculate
         const result = this.calculationService.calculateInvoice(partialInvoice);
         this.calculatedInvoice.set(result);
     }
 
+    /**
+     * Recursively traverses form controls to identify and format validation errors for the user.
+     * @param form FormGroup - The root form group to validate.
+     * @returns string[] - A list of human-readable error messages.
+     */
     private getFormValidationErrors(form: FormGroup): string[] {
         const result: string[] = [];
         Object.keys(form.controls).forEach(key => {
@@ -214,7 +249,6 @@ export class InvoiceGeneratorComponent {
                     result.push(`Field '${key}' is invalid: ${keyError}`);
                 });
             }
-            // Check groups nested
             if (form.get(key) instanceof FormGroup) {
                 const group = form.get(key) as FormGroup;
                 Object.keys(group.controls).forEach(gKey => {
@@ -225,7 +259,6 @@ export class InvoiceGeneratorComponent {
             }
         });
 
-        // Line items check
         const items = form.get('lineItems') as FormArray;
         items.controls.forEach((ctrl, index) => {
             if (ctrl.invalid) {
@@ -236,15 +269,19 @@ export class InvoiceGeneratorComponent {
         return result;
     }
 
-    async generatePDF() {
+    /**
+     * Validates the form, saves the invoice to state, and triggers the PDF generation helper.
+     * @returns Promise<void>
+     */
+    async generatePDF(): Promise<void> {
         if (this.logoUrl() === null) {
             const useDefaultLogo = confirm('Do you want to use the default watermark?');
             if (useDefaultLogo) {
-                this.logoUrl.set('raseedlogoCropped.png');
+                this.logoUrl.set('Bill0logoCropped.png');
             }
         }
         if (this.invoiceForm.valid && this.calculatedInvoice()) {
-            this.validationErrors.set([]); // Clear errors
+            this.validationErrors.set([]);
 
             const invoice = this.calculatedInvoice()!;
 
@@ -274,7 +311,6 @@ export class InvoiceGeneratorComponent {
 
             this.billingService.createInvoice(fullInvoice, fullInvoice.idempotencyKey);
 
-            // Trigger PDF download with error handling
             try {
                 await generateInvoicePDF(fullInvoice, this.logoUrl(), this.appLogo());
                 console.log('PDF generated successfully!');

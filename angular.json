@@ -1,4 +1,10 @@
 {
+  "metadata": {
+    "author": "Abdul Faheem A",
+    "copyrights": "Gahranox Carvel Labs Technologies",
+    "purpose": "Workspace configuration for the Angular CLI.",
+    "usecase": "Manages build, serve, and test pipeline settings for the Bill0 project."
+  },
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
@@ -6,7 +12,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "raseed": {
+    "Bill0": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -56,10 +62,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "raseed:build:production"
+              "buildTarget": "Bill0:build:production"
             },
             "development": {
-              "buildTarget": "raseed:build:development"
+              "buildTarget": "Bill0:build:development"
             }
           },
           "defaultConfiguration": "development"

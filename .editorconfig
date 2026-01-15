@@ -1,3 +1,7 @@
+# Author: Abdul Faheem A
+# Copyrights: Gahranox Carvel Labs Technologies
+# Purpose: Enforces consistent coding styles and IDE behaviors across the project.
+# Usecase: Ensures that contributors use the same indentation, charset, and newline rules regardless of their editor.
 # Editor configuration, see https://editorconfig.org
 root = true
 

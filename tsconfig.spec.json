@@ -1,3 +1,9 @@
+/*
+  Author: Abdul Faheem A
+  Copyrights: Gahranox Carvel Labs Technologies
+  Purpose: TypeScript configuration for the test suite using Vitest/Jasmine.
+  Usecase: Ensures that spec files and test helpers are compiled with appropriate global types and target outputs.
+*/
 /* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
 /* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
 {
@@ -11,5 +17,8 @@
   "include": [
     "src/**/*.d.ts",
     "src/**/*.spec.ts"
+  ],
+  "exclude": [
+    "src/test/UAT/**/*.spec.ts"
   ]
 }

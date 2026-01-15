@@ -1,3 +1,10 @@
+/**
+ * Author: Abdul Faheem A
+ * Copyrights: Gahranox Carvel Labs Technologies
+ * Purpose: Handles all financial calculations for invoices, including line item totals, taxes, discounts, and proration.
+ * Usecase: This service is used by the InvoiceGeneratorComponent to maintain real-time accuracy of invoice totals as the user modifies form data.
+ */
+
 import { Injectable } from '@angular/core';
 import { CurrencyCode, LineItem, Money, ProrationDetails, TaxType, Invoice } from './models';
 
@@ -9,11 +16,9 @@ export class CalculationService {
     constructor() { }
 
     /**
-     * STRICT ORDER OF OPERATIONS:
-     * 1. Calculate Line Item Subtotal (Quantity * Unit Price)
-     * 2. Apply Discounts (Pre-tax)
-     * 3. Calculate Tax
-     * 4. Rounding
+     * Calculates the subtotal, tax, and final total for a single line item.
+     * @param item Partial<LineItem> - The partial line item data from the form.
+     * @returns LineItem - The fully calculated line item with totals.
      */
     calculateLineItem(item: Partial<LineItem>): LineItem {
         // 1. Calculate Line Item Subtotal
@@ -63,6 +68,11 @@ export class CalculationService {
         } as LineItem;
     }
 
+    /**
+     * Aggregates calculations for an entire invoice by iterating through line items.
+     * @param invoiceData Partial<Invoice> - The invoice payload containing line items.
+     * @returns Invoice - The completed invoice with calculated totals.
+     */
     calculateInvoice(invoiceData: Partial<Invoice>): Invoice {
         // 1. Calculate each line item
         const calculatedItems = (invoiceData.lineItems || []).map(item => this.calculateLineItem(item));
@@ -94,6 +104,14 @@ export class CalculationService {
         } as Invoice;
     }
 
+    /**
+     * Calculates the proration factor based on usage dates vs billing period.
+     * @param startDate Date - The start of the usage.
+     * @param endDate Date - The end of the usage.
+     * @param periodStart Date - The start of the billing period.
+     * @param periodEnd Date - The end of the billing period.
+     * @returns ProrationDetails - Object containing days count and the calculated factor.
+     */
     calculateProration(startDate: Date, endDate: Date, periodStart: Date, periodEnd: Date): ProrationDetails {
         // Formula: (Days of Use / Total Days) logic standard
         const oneDay = 24 * 60 * 60 * 1000;
